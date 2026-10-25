@@ -2,6 +2,8 @@
 
 A responsive React storefront with API-powered products, client-side routing, and an interactive shopping cart, built for [The Odin Project Shopping Cart assignment](https://www.theodinproject.com/lessons/node-path-react-new-shopping-cart).
 
+[Live demo](https://odin-shopping-cart-lilac.vercel.app/)
+
 ![Common Goods storefront](docs/storefront.png)
 
 ## Features
@@ -49,4 +51,4 @@ Product titles, prices, categories, and images come from Fake Store API. Unusabl
 
 This is a learning demo without checkout, payment, authentication, or inventory. Cart contents reset on refresh. The catalog and external images require internet access; the public API may be unavailable. No real orders are placed.
 
-The repository is prepared for Vercel with `vercel.json` SPA rewrites. Use `npm run build` as the build command and `dist` as the output directory. Deployment has not been published.
+Hosted on Vercel with `vercel.json` SPA rewrites for direct visits and refreshes on nested routes. The build command is `npm run build` and the output directory is `dist`.
