@@ -63,6 +63,26 @@ describe('catalog and navigation', () => {
       products[0].image,
     )
   })
+  it('turns a stalled request into a retry state and ignores its late response', async () => {
+    vi.useFakeTimers()
+    let resolve
+    const fetch = vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () =>
+        new Promise((r) => {
+          resolve = r
+        }),
+    )
+    try {
+      open()
+      await act(async () => vi.advanceTimersByTime(15000))
+      expect(screen.getByRole('alert')).toHaveTextContent('couldn’t load')
+      expect(fetch.mock.calls[0][1].signal.aborted).toBe(true)
+      await act(async () => resolve({ ok: true, json: async () => products }))
+      expect(screen.getByRole('alert')).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
   it('offers retry after a failed HTTP request', async () => {
     const fetch = mockCatalog()
     fetch.mockResolvedValueOnce({ ok: false })

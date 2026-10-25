@@ -42,6 +42,13 @@ export default function useProducts() {
   useEffect(() => {
     const controller = new AbortController()
     let active = true
+    // A slow public API should lead to a retry state instead of an endless loader.
+    const timeout = setTimeout(() => {
+      if (active) {
+        controller.abort()
+        setCatalog({ status: 'error', products: [] })
+      }
+    }, 15000)
     async function load() {
       try {
         const response = await fetch(PRODUCTS_URL, {
@@ -49,15 +56,19 @@ export default function useProducts() {
         })
         if (!response.ok) throw new Error('Catalog request failed.')
         const products = parseProducts(await response.json())
-        if (active) setCatalog({ status: 'success', products })
+        if (active && !controller.signal.aborted)
+          setCatalog({ status: 'success', products })
       } catch {
         if (active && !controller.signal.aborted)
           setCatalog({ status: 'error', products: [] })
+      } finally {
+        clearTimeout(timeout)
       }
     }
     load()
     return () => {
       active = false
+      clearTimeout(timeout)
       controller.abort()
     }
   }, [attempt])
