@@ -4,8 +4,6 @@ A responsive React storefront with API-powered products, client-side routing, an
 
 [Live demo](https://odin-shopping-cart-lilac.vercel.app/)
 
-![Common Goods storefront](docs/storefront.png)
-
 ## Features
 
 - Home, Shop, Cart, and a helpful not-found page with shared navigation.
